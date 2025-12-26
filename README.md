@@ -59,6 +59,11 @@ The contents are intended **strictly for private, non-commercial, educational us
 - [11. Fabrication](#11-fabrication)
 - [12. Packaging and Final Testing](#12-packaging-and-final-testing)
 
+[Section 2: Verilog Basics](#section-2-verilog-basics)
+- [1. Dataflow Modeling](#1-dataflow-modeling)
+- [2. Behavioural Modeling](#2-behavioral-modeling)
+- [3. Structural Modeling](#3-structural-modeling)
+
 ---
 
 # Section 1: ASIC Design Flow
@@ -223,6 +228,167 @@ After fabrication, the die is packaged to protect it and allow external connecti
 
 ---
 
+Perfect. This is a clean conceptual section, and it deserves a **calm, explanatory tone**—the kind that clicks for beginners and still feels correct months later.
+
+Below is a **rewritten, elaborative version** of **Section 2: Verilog Basics**, blending paragraphs with bullets, and tightening technical accuracy without overcomplicating things.
+
+You can drop this directly into your documentation.
+
+---
+
+# Section 2: Verilog Basics
+
+Verilog is a **Hardware Description Language (HDL)** used to model, design, and simulate digital hardware. Unlike software languages, Verilog does not describe a sequence of instructions executed one after another. Instead, it describes **hardware structures and behavior that operate concurrently**.
+
+One of the most important ideas in Verilog is that the *same hardware* can be described in **multiple modeling styles**, depending on how much detail the designer wants to expose and what the design intent is.
+
+Broadly, Verilog supports **three primary design styles**.
+
+---
+
+## 1. Dataflow Modeling
+
+Dataflow modeling is used when the designer **knows the logic relationship** between inputs and outputs. In this style, the circuit is described using **Boolean expressions** and continuous assignments.
+
+Here, the focus is on *how data flows* through logic rather than how the circuit is physically built.
+
+Dataflow modeling is typically used for:
+
+* Combinational logic
+* Simple arithmetic or logical expressions
+* Situations where the Boolean equation is already known
+
+Key characteristics:
+
+* Uses continuous assignments (`assign`)
+* Describes logic equations directly
+* No notion of clocking or sequential behavior
+
+This style is concise and readable, making it ideal for modeling well-defined combinational circuits.
+
+### Important Points While Writing Dataflow Style Designs in Verilog
+
+1. Every Verilog design starts with the `module` keyword, followed by the module name and the list of input and output ports enclosed in parentheses.
+2. All input and output ports must be explicitly declared after the module definition.
+3. The logic is written using the `assign` keyword, which is used to describe combinational logic in dataflow modeling.
+4. Each module definition must be terminated using the `endmodule` keyword.
+5. The structure involving `module`, `input`, `output`, and `endmodule` remains the same for all three Verilog design styles; only the internal logic description changes.
+6. The logic written in dataflow style is **concurrent** in nature, meaning all assignments are evaluated in parallel rather than sequentially.
+
+### Example:
+```verilog
+#This is an example verilog design in Dataflow style of a Half Adder
+
+module HA_df(s,c,a,b);
+input a,b;
+output s,c;
+
+assign s=a^b;
+assign c=a&b;
+
+endmodule
+```
+
+---
+
+## 2. Behavioral Modeling
+
+Behavioral modeling describes **what the circuit does**, not how it is physically implemented. This style is especially useful when the internal logic or Boolean expression is **not explicitly known** or when describing complex behavior.
+
+Behavioral modeling is widely used for **sequential circuits**, where time and clocking play a major role.
+
+Typical use cases include:
+
+* Sequential elements like flip-flops
+* Finite State Machines (FSMs)
+* Complex control logic
+* High-level functional descriptions
+
+Important points:
+
+* Uses procedural blocks such as `always`
+* Can model both combinational and sequential logic
+* Clock and reset behavior can be explicitly described
+
+Design preferences:
+
+* **Flip-flops are always designed using behavioral modeling**
+* **Sequential logic is best expressed behaviorally**
+* **Latches can be designed using either behavioral or dataflow styles**, though behavioral is more common for clarity
+
+Behavioral modeling is powerful but must be written carefully to avoid unintended hardware inference.
+
+### Important Points for Behavioral Design in Verilog
+
+1. Behavioral modeling introduces the `always` keyword. The general syntax is:
+   `always @ ( ) begin ... end`
+2. In behavioral design, a data type called `reg` is used. Variables of type `reg` can hold their values.
+3. The variables listed inside `always @ ( )` form the **sensitivity list**.
+   The `always` block is executed whenever **at least one variable in the sensitivity list changes**.
+   The block executes at least once at the start, since the sensitivity list variables are assigned initial values. After execution, the variables on the left-hand side retain their values until the sensitivity list changes again. Because these variables hold their values, they are declared using the `reg` data type.
+4. If a variable is not explicitly declared as `reg`, it is treated as a `wire` by default.
+
+### Example:
+```verilog
+#This is an example verilog design in Behavioural style of a Half Adder
+
+module HA_bh(s,c,a,b);
+input a,b;
+output s,c;
+
+always @(a,b)
+  begin
+    assign s=a^b;
+    assign c=a&b;
+  end
+
+endmodule
+```
+
+---
+
+## 3. Structural Modeling
+
+Structural modeling describes a design by **connecting smaller modules together** to form a larger system. This style closely resembles a **schematic-level view** of hardware.
+
+Instead of writing logic equations or behavior, the designer instantiates existing modules and wires them together.
+
+Structural modeling is commonly used for:
+
+* Top-level designs
+* Integrating IP blocks
+* Hierarchical design construction
+* Netlist-level representations
+
+Key characteristics:
+
+* Built using module instantiations
+* Emphasizes connectivity rather than logic
+* Reflects the physical structure of the design
+
+This style is especially useful in large designs, where breaking the system into reusable blocks improves readability and maintainability.
+
+Got it. Keeping it **short, precise, and faithful to your original**, with just enough polish to make it GitHub-ready.
+
+### Important Points for Structural Design Style in Verilog
+
+1. Structural design style is generally **not used to design logic**. It is primarily used to **interconnect blocks or modules** to form a larger design.
+2. To create an instance of a module, the **module name** is written first, followed by a **unique instance name**, and then the list of input and output ports for that instance.
+3. The **order of inputs and outputs** in the module instance must match the order defined in the original module declaration.
+
+### Example:
+```verilog
+#This is an example verilog design in Structural style of a Half Adder
+
+module HA_bh(s,c,a,b);
+input a,b;
+output s,c;
+
+xor xor1(s,a,b);
+and and1(c,a,b);
+
+endmodule
+```
 
 
 
