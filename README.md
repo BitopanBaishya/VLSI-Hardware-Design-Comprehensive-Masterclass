@@ -332,7 +332,7 @@ Behavioral modeling is powerful but must be written carefully to avoid unintende
 ```verilog
 #This is an example verilog design in Behavioural style of a Half Adder
 
-module HA_st(s,c,a,b);
+module HA_bh(s,c,a,b);
 input a,b;
 output s,c;
 
@@ -380,7 +380,7 @@ Got it. Keeping it **short, precise, and faithful to your original**, with just 
 ```verilog
 #This is an example verilog design in Structural style of a Half Adder
 
-module HA_bh(s,c,a,b);
+module HA_st(s,c,a,b);
 input a,b;
 output s,c;
 
