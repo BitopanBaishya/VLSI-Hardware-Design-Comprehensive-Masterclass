@@ -277,7 +277,7 @@ This style is concise and readable, making it ideal for modeling well-defined co
 
 ### Example:
 ```verilog
-#This is an example verilog design in Dataflow style of a Half Adder
+//This is an example verilog design in Dataflow style of a Half Adder
 
 module HA_df(s,c,a,b);
 input a,b;
@@ -330,7 +330,7 @@ Behavioral modeling is powerful but must be written carefully to avoid unintende
 
 ### Example:
 ```verilog
-#This is an example verilog design in Behavioural style of a Half Adder
+//This is an example verilog design in Behavioural style of a Half Adder
 
 module HA_bh(s,c,a,b);
 input a,b;
@@ -378,7 +378,7 @@ Got it. Keeping it **short, precise, and faithful to your original**, with just 
 
 ### Example:
 ```verilog
-#This is an example verilog design in Structural style of a Half Adder
+//This is an example verilog design in Structural style of a Half Adder
 
 module HA_st(s,c,a,b);
 input a,b;
@@ -390,5 +390,57 @@ and and1(c,a,b);
 endmodule
 ```
 
+---
 
+## 4. Full Adder in different design styles
+
+In this section, we will explore how a 1-bit Full Adder can be modelled in the different design styles.
+
+### 1. Structural Design - 1
+Here, the structural design style has been adopted for the design of a 1-bit full adder using the following pre-defined modules:
+- Xor (2 instantiations)
+- And (3 instantiations)
+- Or (1 instantiation)
+
+```verilog
+//1-bit Full Adder - Structural_2
+
+module FA_st(s,c,a,b,Cin);
+input a,b,Cin;
+output s,c;
+
+wire N1,N2,N3,N4;
+
+xor xor1(N1,a,b);
+xor xor2(s,N1,Cin);
+
+and and1(N2,a,b);
+and and2(N3,b,Cin);
+and and3(N4,Cin,a);
+
+or or(c,N1,N2,N3);
+
+endmodule
+```
+
+### 2. Structural Design - 2
+Here, the structural design style has been adopted for the design of a 1-bit full adder using the following pre-defined modules:
+- HA_df (2 instamtiations)
+
+```verilog
+//1-bit Full Adder - Structural_1
+
+module FA_st(s,c,a,b,Cin);
+input a,b,Cin;
+output s,c;
+
+wire N1,N2,N3;
+
+HA_df HA_df_1(N1,N2,a,b);
+HA_df HA_df_2(s,N3,N1,Cin);
+
+or or(c,N2,N3);
+
+endmodule
+```
 
